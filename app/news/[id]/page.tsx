@@ -1,16 +1,28 @@
 import React from 'react';
+import {DUMMY_NEWS} from "@/dummy-news";
+import {notFound} from "next/navigation";
 
 type Prop = { params: { id: string } }
 
-const NewsDetailPage = ({params}: Prop) => (
-    <div>
-        <h1>News Detail - {params.id} Page</h1>
-        <ul>
-            <li>First News Item</li>
-            <li>Second News Item</li>
-            <li>Third News Item</li>
-        </ul>
-    </div>
-);
+const NewsDetailPage = ({params}: Prop) => {
+    const newsId = params.id;
+
+    const newsItem = DUMMY_NEWS.find(item => item.slug === newsId);
+
+    if (!newsItem) {
+        notFound();
+    }
+
+    return (
+        <article className='news-article'>
+            <header>
+                <img src={`/images/news/${newsItem!.image}`} alt={newsItem!.title} />
+                <h1>{newsItem!.title}</h1>
+                <time dateTime={newsItem!.date}>{newsItem!.date}</time>
+            </header>
+            <p>{newsItem!.content}</p>
+        </article>
+    );
+};
 
 export default NewsDetailPage;
